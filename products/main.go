@@ -1,6 +1,9 @@
 package main
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
 	a := App{}
@@ -8,6 +11,8 @@ func main() {
 		os.Getenv("APP_DB_USERNAME"),
 		os.Getenv("APP_DB_PASSWORD"),
 		os.Getenv("APP_DB_NAME"))
+	fmt.Printf("\nConnecting to DB...\n")
+	fmt.Printf("%s\n", os.Getenv("APP_DB_USERNAME"))
 
 	a.Run(":5432")
 
