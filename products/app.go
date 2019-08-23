@@ -27,4 +27,27 @@ func (a *App) Initialize(user, password, dbname string) {
 	a.Router = mux.NewRouter()
 }
 
+func (a *APP) getProduct(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, "Invalid product ID")
+		return
+	}
+
+	p := product{ID: id}
+	if err := p.getProduct(a.DB); err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			respondWithError(w, http.StatusNotFound, "Product not found")
+		default:
+			respondWithError(w, http.StatusInternalServerError, err.Error())
+
+		}
+		return
+	}
+	respondWithJSON(w, http.StatusOK, p)
+
+}
+
 func (a *App) Run(addr string) {}
